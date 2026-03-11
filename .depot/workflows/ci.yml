@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main, "release/**"]
+    branches: [main, 'release/**']
 
 permissions:
   contents: read
@@ -14,7 +14,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}"
+  group: '${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}'
   cancel-in-progress: true
 
 jobs:
@@ -30,18 +30,18 @@ jobs:
             path: backend
             timeout: 30
             gcc: true
-            cgo_enabled: "1"
+            cgo_enabled: '1'
           - name: cli
             path: cli
             timeout: 10
             gcc: false
-            cgo_enabled: "1"
+            cgo_enabled: '1'
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
       - name: Setup Just
-        uses: extractions/setup-just@v3
+        run: curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | sudo bash -s -- --to /usr/local/bin
 
       - name: Set up Depot CLI
         if: matrix.module.gcc
@@ -145,8 +145,8 @@ jobs:
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          comment-author: "github-actions[bot]"
-          body-includes: "## 🔍 Deadcode Analysis"
+          comment-author: 'github-actions[bot]'
+          body-includes: '## 🔍 Deadcode Analysis'
 
       - name: Delete comment if no deadcode found
         if: steps.deadcode.outputs.count == '0' && steps.fc.outputs.comment-id != ''
@@ -201,7 +201,7 @@ jobs:
           cache: pnpm
 
       - name: Setup Just
-        uses: extractions/setup-just@v3
+        run: curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | sudo bash -s -- --to /usr/local/bin
 
       - name: Install Fontend Dependencies
         run: just deps install frontend
@@ -246,7 +246,7 @@ jobs:
           run_install: false
 
       - name: Setup Just
-        uses: extractions/setup-just@v3
+        run: curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | sudo bash -s -- --to /usr/local/bin
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
